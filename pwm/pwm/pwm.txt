@@ -1,0 +1,61 @@
+// pwm on channel 6 
+// include conf_board.h and conf_clock.h and inside conf_board.h uncommented the line #define 
+
+#include <asf.h>
+
+
+#define PIN_PWM4  45   // PC18 - pin 100 - channel 6 H
+#define PIN_PWM2 108   // PC20 - pin 131 - channel 4 H
+#define PIN_PWM1  9    // PC21 - pin 132 - channel 4 L
+#define PIN_EN1   8    // PC22 - pin 133
+#define PIN_PWM3  7    // PC23 - pin 134 - channel 6 L
+#define PIN_EN2   3    // PC28 - pin 139
+
+//Channel4/bridge1, broches OUT1-OUT2
+//Channel6/bridge2, broches OUT3-OUT4
+
+
+void init_pwm()
+{
+	// output mode
+
+	pmc_enable_periph_clk(ID_PWM);
+	pwm_channel_disable(PWM, PWM_CHANNEL_4);
+	pwm_channel_disable(PWM, PWM_CHANNEL_6);
+
+	// square wave is 1KHz, 50% duty cycle
+	pwm_clock_t pwm_clock ={
+	  .ul_clka = 1000*100,
+	  .ul_clkb = 0,
+	  .ul_mck = 84000000
+	};
+	pwm_init(PWM, &pwm_clock);
+
+	pwm_channel1.alignment = PWM_ALIGN_LEFT;
+	pwm_channel1.polarity = PWM_LOW;
+	pwm_channel1.ul_prescaler = PWM_CMR_CPRE_CLKA;
+	pwm_channel1.ul_duty = 50;
+	pwm_channel1.ul_period = 100;
+	pwm_channel1.channel = PWM_CHANNEL_4;
+	
+	pwm_channel2.alignment = PWM_ALIGN_LEFT;
+	pwm_channel2.polarity = PWM_LOW;
+	pwm_channel2.ul_prescaler = PWM_CMR_CPRE_CLKA;
+	pwm_channel2.ul_duty = 50;
+	pwm_channel2.ul_period = 100;
+	pwm_channel2.channel = PWM_CHANNEL_6;
+	
+	pwm_channel_init(PWM, &pwm_channel1);
+	pwm_channel_init(PWM, &pwm_channel2);
+}
+
+void test_pwm() {
+   pwm_channel_enable(PWM, PWM_CHANNEL_4); // generate a square wave on bridge1
+   pwm_channel_enable(PWM, PWM_CHANNEL_6); // generate a square wave on bridge2
+}
+
+void reset_pwm() {
+   pwm_channel_disable(PWM, PWM_CHANNEL_4); // stop pwm
+   pwm_channel_disable(PWM, PWM_CHANNEL_6);
+}
+

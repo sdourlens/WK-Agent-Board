@@ -1,0 +1,13 @@
+STMicroelectronics L6201P
+- 5A maximum peak current
+- 4A total RMS current
+Vref=12V to 48V => out1, out2
+
+3.3V or 5V microcontroller will work fine.
+in1 = LPWM 
+in2 = RPWM
+in3 = LPWM 
+in4 = RPWM
+
+infos:
+http://modularcircuits.tantosonline.com/blog/articles/h-bridge-secrets/
