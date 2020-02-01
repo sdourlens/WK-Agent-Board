@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html class="google ng-scope" ng-app="codesiteArchive.application" lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta content="initial-scale=1, minimum-scale=1, width=device-width" name="viewport">
+
+    <!-- https://developers.google.com/webmasters/ajax-crawling/docs/specification -->
+    <meta name="fragment" content="!">
+    <title>Google Code Archive - Long-term storage for Google Code Project Hosting.</title>
+
+    <link rel="icon" type="image/vnd.microsoft.icon" href="https://code.google.com/archive/img/project-hosting.ico">
+    <script src="tvout_files/google.js"></script>
+    <link href="tvout_files/maia.css" rel="stylesheet">
+    <link href="tvout_files/css.css" rel="stylesheet">
+    <link rel="stylesheet" href="tvout_files/archive_css.css">
+    <script>
+      CLOSURE_NO_DEPS = true;
+    </script>
+    <script src="tvout_files/angular.js"></script><style type="text/css">@charset "UTF-8";
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak],
+.ng-cloak, .x-ng-cloak,
+.ng-hide:not(.ng-hide-animate) {
+  display: none !important;
+}
+
+ng\:form {
+  display: block;
+}
+
+.ng-animate-shim {
+  visibility:hidden;
+}
+
+.ng-anchor {
+  position:absolute;
+}
+</style>
+    <script src="tvout_files/pagedown.js"></script>
+    <script src="tvout_files/archive.js"></script>
+    <!-- base href="https://code.google.com/archive/" -->
+  </head>
+
+  <body>
+    <div class="maia-header" id="maia-header" role="banner">
+      <div class="maia-aux">
+        <a href="https://code.google.com/archive/">
+          </a><h1><a href="https://code.google.com/archive/">
+            <img alt="Google" src="tvout_files/googlelogo_color_116x41dp.png"> Code</a>
+          </h1>
+        
+        <a href="https://code.google.com/archive/">
+          <h2>
+            Archive
+          </h2>
+        </a>
+        <a class="maia-teleport" href="#content">Skip to content</a>
+        <div class="maia-util">
+          <form action="/archive/search" class="maia-search ng-pristine ng-valid">
+            <input name="q" placeholder="Search this site" type="text">
+            <button class="maia-button">
+              <span class="maia-search-icon">Search</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ngView:  --><div ng-view="" class="ng-scope"><div ng-controller="ProjectHomepageCtrl as projectCtrl" class="ng-scope">
+<nav-bar-widget nav-level-1="projectCtrl.navLevel1" class="ng-isolate-scope"><div class="maia-nav maia-complex" id="maia-nav-x" role="navigation">
+  <div class="maia-aux">
+    <ul>
+      <li ng-class="{active: navLevel1 == 'projects'}" class="active">
+        <a href="https://code.google.com/archive/">Projects</a>
+        <!-- ngIf: navLevel2 -->
+      </li>
+      <li ng-class="{active: navLevel1 == 'search'}">
+        <a href="https://code.google.com/archive/search">Search</a>
+      </li>
+      <li ng-class="{active: navLevel1 == 'about'}">
+        <a href="https://code.google.com/archive/about">About</a>
+      </li>
+    </ul>
+  </div>
+</div>
+</nav-bar-widget>
+<div id="maia-main" role="main">
+
+  <!-- Left-side resource nav -->
+  <span ng-hide="projectCtrl.project.notFound">
+    <project-resources-widget domain="projectCtrl.domain" project="projectCtrl.projectName" class="ng-isolate-scope"><div class="maia-nav" id="maia-nav-y" role="navigation">
+  <!-- ngIf: domain == 'code.google.com' --><ul ng-if="domain == 'code.google.com'" class="ng-scope">
+    <li class="active">
+      <a href="https://code.google.com/archive/p/arduino-tvout/">Project</a>
+    </li>
+    <li>
+      <a href="https://code.google.com/archive/p/arduino-tvout/source">Source</a>
+    </li>
+    <li>
+      <a href="https://code.google.com/archive/p/arduino-tvout/issues">Issues</a>
+    </li>
+    <li>
+      <a href="https://code.google.com/archive/p/arduino-tvout/wikis">Wikis</a>
+    </li>
+    <li>
+      <a href="https://code.google.com/archive/p/arduino-tvout/downloads">Downloads</a>
+    </li>
+  </ul><!-- end ngIf: domain == 'code.google.com' -->
+
+    <!-- ngIf: domain != 'code.google.com' -->
+</div></project-resources-widget>
+  </span>
+
+  <div class="maia-article" role="article">
+    <div class="maia-teleport" id="content"></div>
+    <div class="maia-cols">
+
+      <!-- BUG: We show "no issues" and relaged sub-pages for projects that
+           do not exist. Similarly, if you go to page 1,000,000 it says the
+           project has no issues, despite page 999,999 existing. -->
+      <!-- ngIf: projectCtrl.project.notFound -->
+
+      <div ng-hide="projectCtrl.project.notFound" id="gca-project-header" class="maia-col-10">
+        <img class="gca-project-logo" src="tvout_files/logo.png">
+        <h1 class="ng-binding">arduino-tvout</h1>
+      </div>
+
+      <div ng-hide="projectCtrl.project.notFound" class="maia-col-10">
+        <hr>
+
+        <!-- ngIf: projectCtrl.error -->
+
+        <!-- Switch by project resource -->
+        <!-- ngIf: !projectCtrl.error --><div ng-if="!projectCtrl.error" ng-switch="projectCtrl.resource" class="ng-scope">
+
+          <!-- Project -->
+          <!-- ngSwitchWhen: project --><div ng-switch-when="project" class="ng-scope">
+            <!-- ngIf: projectCtrl.project == null -->
+
+            <!-- ngIf: projectCtrl.project.notFound -->
+
+            <!-- ngIf: projectCtrl.project.found --><div ng-if="projectCtrl.project.found" class="ng-scope">
+              <div class="maia-col-6">
+                <p class="maia-meta ng-binding">A composite video output library for AVR/Arduino</p>
+                <markdown-widget text="projectCtrl.project.description" class="markdown"><p>The goal of this project is to create a simple interupt driven library for generating composite video on a single AVR chip.</p>
+
+<p>Currently the output is  NTSC or PAL at a resolution of 128x96 by default.
+The library currently works on ATmega168,328,1280,2560,644p,1284p,AT90USB1286 and more can be added by editing one file.</p>
+
+<h1>News</h1>
+
+<p>Beta1 for version 1.0 is out!!! It has some it changes the hardware 
+connections as well as some of the function calls see the wiki for full 
+details.</p>
+
+<h1>Connections</h1>
+
+<p><img src="tvout_files/5225072558_5f5f760037.jpg" alt="http://farm5.static.flickr.com/4087/5225072558_5f5f760037.jpg" title=""></p>
+
+<p>SYNC is on <em>OCR1A</em> and AUDIO is on <em>OC2A</em>
+| <strong>MCU</strong> | <strong>SYNC</strong> | <strong>VIDEO</strong> | <strong>AUDIO</strong> | <strong>Arduino</strong> | <strong>SYNC</strong> | <strong>VIDEO</strong> | <strong>AUDIO</strong> |
+|:--------|:---------|:----------|:----------|:------------|:---------|:----------|:----------|
+|m168,m328|B 1       |D 7        |B 3        |NG,Decimila,UNO|9         |7          |11         |
+|m1280,m2560|B 5       |A 7        |B 4        |Mega         |11        |A7(D29)    |10         |
+|m644,m1284p|D 5       |A 7        |D 7        |sanguino     |13        |A7(D24)    |8          |
+|AT90USB1286|B 5       |F 7        |B 4        |--           |--        |--         |--         |
+<strong>There are some timing issues with the m1284p, may be related to sanguino core.</strong></p>
+
+<h1>Products Based on TVout</h1>
+
+<p>Wayne and Layn LLC now makes a shield that uses this library, the
+<a href="http://wayneandlayne.com/projects/video-game-shield/games/">video game shield</a>.</p>
+
+<p>nootropic design is selling a stand alone arduino compatible board the
+<a href="http://nootropicdesign.com/hackvision/">hackvision</a>.</p>
+
+<h1>Included Examples</h1>
+
+<p>Very simple as they may be.</p>
+
+<p>http://www.youtube.com/watch?feature=player_embedded&amp;v=MEg_V4YZDh0'
+ target='_blank'&gt;http://img.youtube.com/vi/MEg_V4YZDh0/0.jpg' 
+width='425' height=344 /&gt;
+http://www.youtube.com/watch?feature=player_embedded&amp;v=bHpFv_x_8Kk' 
+target='_blank'&gt;http://img.youtube.com/vi/bHpFv_x_8Kk/0.jpg' 
+width='425' height=344 /&gt;</p></markdown-widget>
+              </div>
+              <div id="gca-project-info-box" class="maia-col-4">
+                <div class="maia-aside">
+                  <h1>Project Information</h1>
+                  <!-- ngIf: projectCtrl.project.creationTime -->
+                  <!-- ngIf: projectCtrl.project.ancestorRepo -->
+                  <ul>
+                    <li>
+                      License: <a href="http://www.opensource.org/licenses/mit-license.php" class="ng-binding">
+                        MIT License</a>
+                    </li>
+                    <!-- ngIf: projectCtrl.project.contentLicenseName -->
+                    <!-- ngIf: projectCtrl.project.stars --><li ng-if="projectCtrl.project.stars" class="ng-binding ng-scope">
+                      284 stars
+                    </li><!-- end ngIf: projectCtrl.project.stars -->
+                    <li class="ng-binding">hg-based source control</li>
+                  </ul>
+                  <!-- ngIf: projectCtrl.project.labels.length > 0 --><p ng-if="projectCtrl.project.labels.length &gt; 0" class="ng-scope">
+                    Labels:
+                    <br>
+                    <!-- ngRepeat: label in projectCtrl.project.labels track by $index --><span ng-repeat="label in projectCtrl.project.labels track by $index" class="ng-scope">
+                      <a href="https://code.google.com/archive/search?q=domain:code.google.com%20label:Arduino"><span class="gca-label ng-binding">Arduino</span></a>
+                    </span><!-- end ngRepeat: label in projectCtrl.project.labels track by $index --><span ng-repeat="label in projectCtrl.project.labels track by $index" class="ng-scope">
+                      <a href="https://code.google.com/archive/search?q=domain:code.google.com%20label:NTSC"><span class="gca-label ng-binding">NTSC</span></a>
+                    </span><!-- end ngRepeat: label in projectCtrl.project.labels track by $index --><span ng-repeat="label in projectCtrl.project.labels track by $index" class="ng-scope">
+                      <a href="https://code.google.com/archive/search?q=domain:code.google.com%20label:PAL"><span class="gca-label ng-binding">PAL</span></a>
+                    </span><!-- end ngRepeat: label in projectCtrl.project.labels track by $index --><span ng-repeat="label in projectCtrl.project.labels track by $index" class="ng-scope">
+                      <a href="https://code.google.com/archive/search?q=domain:code.google.com%20label:Composite"><span class="gca-label ng-binding">Composite</span></a>
+                    </span><!-- end ngRepeat: label in projectCtrl.project.labels track by $index --><span ng-repeat="label in projectCtrl.project.labels track by $index" class="ng-scope">
+                      <a href="https://code.google.com/archive/search?q=domain:code.google.com%20label:Video"><span class="gca-label ng-binding">Video</span></a>
+                    </span><!-- end ngRepeat: label in projectCtrl.project.labels track by $index --><span ng-repeat="label in projectCtrl.project.labels track by $index" class="ng-scope">
+                      <a href="https://code.google.com/archive/search?q=domain:code.google.com%20label:AVR"><span class="gca-label ng-binding">AVR</span></a>
+                    </span><!-- end ngRepeat: label in projectCtrl.project.labels track by $index -->
+                  </p><!-- end ngIf: projectCtrl.project.labels.length > 0 -->
+                </div>
+              </div>
+            </div><!-- end ngIf: projectCtrl.project.found -->
+          </div><!-- end ngSwitchWhen: -->
+
+          <!-- Source -->
+          <!-- ngSwitchWhen: source -->
+
+          <!-- Issues -->
+          <!-- ngSwitchWhen: issues -->
+
+          <!-- Wikis -->
+          <!-- ngSwitchWhen: wikis -->
+
+          <!-- Downloads -->
+          <!-- ngSwitchWhen: downloads -->
+
+          <!-- Default -->
+          <!-- ngSwitchDefault:  -->
+
+        <!-- end Switch -->
+        </div><!-- end ngIf: !projectCtrl.error -->
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+    <div id="maia-signature"></div>
+    <div class="maia-footer" id="maia-footer">
+      <div id="maia-footer-local">
+      </div>
+      <div id="maia-footer-global">
+        <div class="maia-aux">
+          <ul>
+            <li>
+              <a href="https://www.google.com/">Google</a>
+            </li>
+            <li>
+              <a href="https://www.google.com/intl/en/about/">About Google</a>
+            </li>
+            <li>
+              <a href="https://www.google.com/intl/en/policies/privacy/">Privacy</a>
+            </li>
+            <li>
+              <a href="https://www.google.com/intl/en/policies/terms/">Terms</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <script src="tvout_files/maia.js"></script>
+  
+
+</body></html>
