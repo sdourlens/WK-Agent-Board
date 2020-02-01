@@ -1,0 +1,207 @@
+#include "Arduino.h"
+#include "global.h"
+#include "TOR.h"
+#include "PINSMAPPING.h"
+#include <DueTimer.h>
+
+volatile float pwm_value_high = 0;
+volatile float prev_time_high = 0;
+volatile float pwm_value_low = 0;
+volatile float prev_time_low = 0;
+int interruptPIN;
+char read_pwm_state=0;
+
+void rising(); 
+void falling();
+
+
+/********** Function called by the timer when rising edge is detected ****************/
+void rising() {
+  attachInterrupt(interruptPIN, falling, FALLING);
+  prev_time_high = micros();
+  pwm_value_low = micros()-prev_time_low;
+
+  if (read_pwm_state>1)
+  { 
+   detachInterrupt(interruptPIN);
+  }
+  //Serial.println(pwm_value_low);
+  read_pwm_state++;
+}
+ 
+/********** Function called by the timer when falling edge is detected ****************/
+void falling() {
+  attachInterrupt(interruptPIN, rising, RISING);
+  prev_time_low = micros();
+  pwm_value_high = micros()-prev_time_high;
+ // Serial.println(pwm_value_high);
+}
+/**************************************************************************************/
+
+/*****************************************************************/
+/************************* FONCTIONS TOR *************************/
+/*****************************************************************/
+
+
+
+//-------- Initialize Digital I/O and commands states ----------
+void init_TOR()
+{
+    char i;
+    
+    for (i=0; i<8; i++){
+      pinMode(PIN_TOR_E [i], INPUT);     
+      pinMode(PIN_TOR_DIAG [i], INPUT);  
+      pinMode(PIN_TOR_CMD [i], OUTPUT); 
+    }
+  
+    for (i=0; i<8; i++){
+      digitalWrite(PIN_TOR_CMD [i], LOW);
+    } 
+}
+
+
+//----------- Command output + check the state ----------//
+
+int command_TOR(int pin, int state)   //MODIFY THE RETURNS ON COMMAND (DON'T USE TOR_E BUT DIAG)!!!!!!
+{  
+  
+    if(pin<0 || pin>7)   //bad parameters
+    {
+      return BAD_ARG;
+    }
+    
+    if(state!=0 && state!=1)  //bad parameters
+    {
+      return BAD_ARG;
+    }
+  
+    digitalWrite(PIN_TOR_CMD[pin], state);
+    
+    if (state==HIGH)
+    {
+      delayMicroseconds(10);          //wait Td(on) of VN800S component   //TO BE CONFIRMED
+    }
+    else
+    {
+      delayMicroseconds(40);          //wait Td(off) of VN800S component   //TO BE CONFIRMED
+    }
+    
+    int val_DIAG  =  digitalRead(PIN_TOR_DIAG[pin]);
+    int val_E     =  digitalRead(PIN_TOR_E[pin]);
+
+
+    if(val_DIAG == HIGH && val_E == state)
+    {
+      return API_OK;
+    }
+    else
+    {
+      return API_ERROR;
+    }
+}
+
+
+//----------- Command a PWM signal on digital Pin ---------- //
+int command_TOR_as_PWM(int pin, int DC_percentage)  //WORK ONLY ON PWM PINS!!!!
+{  
+  
+    if(pin<0 || pin>7)   //bad parameters
+    {
+      return BAD_ARG;
+    }
+    
+    if(DC_percentage <0 && DC_percentage>100)  //bad parameters
+    {
+      return BAD_ARG;
+    }
+    int value = DC_percentage*255/100;
+    //Serial.println(value);
+    analogWrite(PIN_TOR_CMD[pin], value);
+
+    return (API_OK);
+}
+
+//----------- read a PWM signal on digital Pin ----------
+float read_TOR_as_PWM(int pin, unsigned int timeout_micros) //WORK ON ALL THE DIGITAL PINS
+{  
+  float read_DC_percent;
+    if(pin<0 || pin>7)   //bad parameters
+    {
+      return BAD_ARG;
+    } 
+
+    interruptPIN = PIN_TOR_E[pin];
+    attachInterrupt(interruptPIN, rising, RISING);    //START INTERRUPT ON THE READING PIN
+                                                      //THE TIMER WILL MEASURE THE TIME OF HIGH AND LOW STATE OF ONE PERIOD OF THE PWM SIGNAL
+                                                      //AND RETURN A PERCENTAGE
+    delayMicroseconds(timeout_micros);
+    Serial.println(read_pwm_state);
+      if(read_pwm_state<2){                          //IF NO RISING OR FALLING EDGE, WE HAVE 100% OR 0%
+          if(prev_time_low == 0){
+             read_DC_percent=100;
+           }
+           else{
+             read_DC_percent=0;
+           }
+        }
+        else{
+          read_DC_percent=100*pwm_value_high/(pwm_value_high+pwm_value_low);  //CALCULATE THE PERCENTAGE
+        }
+    
+    read_pwm_state=0;
+    return(read_DC_percent);
+}
+
+//----------- Stop PWM and check if it's done ----------
+
+int stop_TOR_as_PWM(int pin)
+{
+  bool val=0;
+  digitalWrite(PIN_TOR_CMD[pin], LOW);
+  delayMicroseconds(40);      //td(Off) TO BE CONFIRMED
+  val=digitalRead(PIN_TOR_E[pin]);
+  
+  if(val==0){
+    return API_OK;
+  } 
+ else{
+   return API_ERROR;
+ } 
+}
+
+//----------- read digital input ----------
+int read_TOR(int pin)
+{
+  
+  if(pin<0 || pin>7)   //bad parameters
+    {
+      return BAD_ARG;
+    }
+    
+  int val_DIAG  = digitalRead(PIN_TOR_DIAG[pin]);
+  int val_E     = digitalRead(PIN_TOR_E[pin]);
+  
+   if(val_DIAG == LOW)
+    {
+      return API_ERROR;
+    }
+    else
+    {
+      return val_E;
+    }
+}
+//----------- read the TOR State ----------
+int	read_DIAG(int pin)
+{
+  if(pin<0 || pin>7)   //bad parameters
+    {
+      return BAD_ARG;
+    }
+    
+ return digitalRead(PIN_TOR_DIAG[pin]);
+}
+/********************************************************************/
+
+
+
