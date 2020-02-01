@@ -1,0 +1,118 @@
+
+------------------------------------------------------------------------------
+
+// data
+uint16_t qca_lastreadsize[MAX_SOCK_NUM]; 
+uint8_t readbuf[MAX_SOCK_NUM][QCAMAXSIZE];
+uint8_t writebuf[MAX_SOCK_NUM][QCAMAXSIZE];
+
+// registers
+uint8_t reg_ip[4];
+uint8_t reg_net[4];
+uint8_t reg_gateway[4];
+uint8_t reg_mac[6];
+uint16_t reg_timeout;
+uint8_t reg_retry;
+uint8_t reg_int;
+uint8_t reg_mask;
+uint16_t reg_rxmemory;
+uint16_t reg_txmemory;
+
+// sockets
+uint8_t socket_mode[MAX_SOCK_NUM];
+uint8_t socket_command[MAX_SOCK_NUM];
+uint8_t socket_interrupt[MAX_SOCK_NUM];
+uint8_t socket_state[MAX_SOCK_NUM];
+uint16_t socket_port[MAX_SOCK_NUM];
+uint8_t socket_dmac[MAX_SOCK_NUM][6]; // destination mac address
+uint8_t socket_dip[MAX_SOCK_NUM][4]; // destination ip
+uint16_t socket_dport[MAX_SOCK_NUM];// destination port
+int16_t socket_mss[MAX_SOCK_NUM]; // max segment size
+uint8_t socket_raw[MAX_SOCK_NUM];
+uint8_t socket_tos[MAX_SOCK_NUM];
+uint8_t socket_ttl[MAX_SOCK_NUM];
+uint16_t socket_txfree[MAX_SOCK_NUM];
+uint16_t socket_txreadptr[MAX_SOCK_NUM];
+uint16_t socket_txwriteptr[MAX_SOCK_NUM];
+uint16_t socket_rxfree[MAX_SOCK_NUM];
+uint16_t socket_rxreadptr[MAX_SOCK_NUM];
+
+uint16_t socket_rxwriteptr[MAX_SOCK_NUM];
+
+// --------------------------------------------
+
+#include "utility/cpl.*"
+
+  
+   CPL.getIPAddress(ret.raw_address());
+   CPL.getGatewayIp(ret.raw_address());
+   CPL.getSubnetMask(ret.raw_address());
+
+  
+EthernetClient, EthernetUdp, EthernetServer:  #include "utility/socket.cpp"
+  
+  x CPL.execCmdSn(s, Sock_OPEN); // execute open/close/listen/connect
+  
+  CPL.writeSnMR(s, protocol | flag); // mode
+  x CPL.writeSnPORT(s, local_port);     // port ip
+  x CPL.writeSnIR(s, 0xFF); // interrupt off?
+  CPL.writeSnRX_RD(s, ptr); // read reception queue
+  x CPL.writeSnDIPR(s, addr); // ip cible
+  x CPL.writeSnDPORT(s, port);  // port cible
+  
+  uint8_t status = CPL.readSnSR(s); // status
+  ptr = CPL.readSnRX_RD(s);
+  CPL.readSnMR(s)
+  CPL.readSnIR(s) 
+  
+  x freesize = CPL.getTXFreeSize(s); 
+  x int16_t ret = CPL.getRXReceivedSize(s);
+
+  
+  
+client.h:
+ uint8_t s = getSn_SR(i); // status: s == SOCK_CLOSED || s == SOCK_FIN_WAIT
+ socket(_sock, Sn_MR_TCP, _srcport + 1024, 0); // mode TCP
+ int getSn_RX_RSR(_sock);
+ 
+w5100.cpp:
+ 
+  writeMR(1<<RST); // mode reg
+  writeTMSR(0x55); // tr.mem.size reg
+  writeRMSR(0x55); // rec
+  
+  val1 = readSnTX_FSR(s); // getTXFreeSize(socket s)
+  val1 = readSnRX_RSR(s); // getRXReceivedSize(SOCKET s)
+  uint16_t ptr = readSnTX_WR(s);
+  writeSnTX_WR(s, ptr);
+  ptr = readSnRX_RD(s);
+  writeSnRX_RD(s, ptr);
+
+  writeSnCR(s, _cmd);
+  while (readSnCR(s))
+ ---------------------
+ 
+ net.C
+ 
+ 
+ #define REGISTER_BLOCK_SIZE 28
+//#define REGISTER_BLOCK_SIZE UINT8_C(28)
+//SIG1(0x55), SIG2(0XAA), GWIP0, GWIP1, GWIP2, GWIP3, MASK0, MASK1, MASK2, MASK3, MAC0, MAC1, MAC2, MAC3, MAC4, MAC5, IP0, IP1, IP2, IP3
+uint8_t registerBuffer[REGISTER_BLOCK_SIZE] = {
+  0x80,                           // MR Mode - reset device
+  
+  // EEPROM block starts here
+  192,168,1,254,                    // GWR Gateway IP Address Register
+  255,255,255,0,                  // SUBR Subnet Mask Register
+  0x12,0x34,0x45,0x78,0x9A,0xBC,  // SHAR Source Hardware Address Register
+  192,168,1,1,                  // SIPR Source IP Address Register
+  // EEPROM block ends here 
+  0,0,                            // Reserved locations
+  0,                              // IR Interrupt Register
+  0,                              // IMR Interrupt Mask Register
+  0x07,0xd0,                      // RTR Retry Time-value Register
+  0x80,                           // RCR Retry Count Register
+  0x55,                           // RMSR Rx Memory Size Register, 2K per socket
+  0x55                            // TMSR Tx Memory Size Register, 2K per socket
+};
+

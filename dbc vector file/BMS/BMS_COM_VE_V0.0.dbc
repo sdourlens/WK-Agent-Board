@@ -1,0 +1,131 @@
+VERSION ""
+
+
+NS_ :
+
+BS_:
+
+BU_: Vector__XXX
+
+BO_ 899 BCVE_Commande_BMS: 5 Vector__XXX
+SG_ BCVE_CB_RequeteModeBMS : 8|2@1+ (1,0) [0|3] "" Vector__XXX
+
+
+BO_ 516 BCVE_Statut_BMS_1: 8 Vector__XXX
+SG_ BCVE_SB1_SOC : 0|8@1+ (1,0) [0|255] "%" Vector__XXX
+SG_ BCVE_SB1_ModeBMSChargeur : 8|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ BCVE_SB1_ModeBMSApplication : 9|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ BCVE_SB1_DefautCSU : 16|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ BCVE_SB1_AlarmeBattChaude : 17|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ Alarme_SurTemperature : 18|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ BCVE_SB1_SOCFaible : 19|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ BCVE_SB1_DefautSurChargeBatt1 : 21|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ BCVE_SB1_DefautSurDechargeBatt : 20|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ BCVE_SB1_DefautSurtemperature : 23|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ BCVE_SB1_DefautCapteurCourant : 28|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ Alarme_SurDechargeBatt : 30|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ BCVE_SB1_AlarmeSurChargeBatt : 31|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ BCVE_SB1_DefautSurChargeBatt2 : 58|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ BCVE_SB1_OuvContactSurDechBatt : 59|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ BCVE_SB1_EchecPrechargeApp : 61|1@1+ (1,0) [0|1] "" Vector__XXX
+
+
+BO_ 532 BCVE_Statut_BMS_2: 8 Vector__XXX
+SG_ BCVE_SB2_TensionBatterie : 0|8@1+ (0.5,0) [0|127.5] "V" Vector__XXX
+SG_ BCVE_SB2_CourantBatterie : 8|16@1+ (1,-32768) [-32768|32767] "A" Vector__XXX
+SG_ BCVE_SB2_CourantMaxDecharge : 24|16@1+ (1,0) [0|65535] "A" Vector__XXX
+SG_ BCVE_SB2_CourantMaxChargeurLSB : 40|8@1+ (1,0) [0|255] "A" Vector__XXX
+SG_ BCVE_SB2_CourantMaxChargeurMSB : 56|8@1+ (1,0) [0|255] "A" Vector__XXX
+SG_ BCVE_SB2_PreavisOuvContacteurs : 48|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ BCVE_SB2_CmdContacteursApp : 49|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ BCVE_SB2_DefautIsolHT : 51|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ BCVE_SB2_CmdContacteursChargeur : 52|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ BCVE_SB2_EchecPrechargeApp : 53|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ BCVE_SB2_DefautContacteurs : 54|1@1+ (1,0) [0|1] "" Vector__XXX
+
+
+BO_ 548 BCVE_Statut_BMS_3: 5 Vector__XXX
+SG_ BCVE_SB3_CourantMaxCharge : 0|8@1+ (1,0) [0|255] "A" Vector__XXX
+SG_ BCVE_SB3_TensionMaxBattAutori : 8|16@1+ (1,0) [0|65535] "" Vector__XXX
+SG_ BCVE_SB3_FinDeCharge : 26|1@1+ (1,0) [0|1] "" Vector__XXX
+
+
+BO_ 580 BCVE_Statut_BMS_4: 8 Vector__XXX
+SG_ BCVE_SB4_TempBlocPlusChaud : 0|8@1+ (1,-40) [-40|215] "°C" Vector__XXX
+SG_ BCVE_SB4_TempBlocMoinsChaud : 8|8@1+ (1,-40) [-40|215] "" Vector__XXX
+SG_ BCVE_SB4_TensionAccuPlusCharge : 32|16@1+ (1,0) [0|65535] "mV" Vector__XXX
+SG_ BCVE_SB4_TensionAccuMoinsCharge : 48|16@1+ (1,0) [0|65535] "mV" Vector__XXX
+
+
+BA_DEF_  "BusType" STRING ;
+BA_DEF_ BO_  "GenMsgCycleTime" INT 0 65535;
+BA_DEF_ SG_  "GenSigStartValue" FLOAT -3.4E+038 3.4E+038;
+
+BA_DEF_DEF_  "BusType" "CAN";
+BA_DEF_DEF_  "GenMsgCycleTime" 0;
+BA_DEF_DEF_  "GenSigStartValue" 0;
+
+BA_ "BusType" "CAN";
+
+BA_ "GenMsgCycleTime" BO_ 899 300;
+
+BA_ "GenSigStartValue" SG_ 899 BCVE_CB_RequeteModeBMS 0;
+BA_ "GenSigStartValue" SG_ 516 BCVE_SB1_SOC 0;
+BA_ "GenSigStartValue" SG_ 516 BCVE_SB1_ModeBMSChargeur 0;
+BA_ "GenSigStartValue" SG_ 516 BCVE_SB1_ModeBMSApplication 0;
+BA_ "GenSigStartValue" SG_ 516 BCVE_SB1_DefautCSU 0;
+BA_ "GenSigStartValue" SG_ 516 BCVE_SB1_AlarmeBattChaude 0;
+BA_ "GenSigStartValue" SG_ 516 Alarme_SurTemperature 0;
+BA_ "GenSigStartValue" SG_ 516 BCVE_SB1_SOCFaible 0;
+BA_ "GenSigStartValue" SG_ 516 BCVE_SB1_DefautSurChargeBatt1 0;
+BA_ "GenSigStartValue" SG_ 516 BCVE_SB1_DefautSurDechargeBatt 0;
+BA_ "GenSigStartValue" SG_ 516 BCVE_SB1_DefautSurtemperature 0;
+BA_ "GenSigStartValue" SG_ 516 BCVE_SB1_DefautCapteurCourant 0;
+BA_ "GenSigStartValue" SG_ 516 Alarme_SurDechargeBatt 0;
+BA_ "GenSigStartValue" SG_ 516 BCVE_SB1_AlarmeSurChargeBatt 0;
+BA_ "GenSigStartValue" SG_ 516 BCVE_SB1_DefautSurChargeBatt2 0;
+BA_ "GenSigStartValue" SG_ 516 BCVE_SB1_OuvContactSurDechBatt 0;
+BA_ "GenSigStartValue" SG_ 516 BCVE_SB1_EchecPrechargeApp 0;
+BA_ "GenSigStartValue" SG_ 532 BCVE_SB2_TensionBatterie 0;
+BA_ "GenSigStartValue" SG_ 532 BCVE_SB2_CourantBatterie 32768;
+BA_ "GenSigStartValue" SG_ 532 BCVE_SB2_CourantMaxDecharge 0;
+BA_ "GenSigStartValue" SG_ 532 BCVE_SB2_CourantMaxChargeurLSB 0;
+BA_ "GenSigStartValue" SG_ 532 BCVE_SB2_CourantMaxChargeurMSB 0;
+BA_ "GenSigStartValue" SG_ 532 BCVE_SB2_PreavisOuvContacteurs 0;
+BA_ "GenSigStartValue" SG_ 532 BCVE_SB2_CmdContacteursApp 0;
+BA_ "GenSigStartValue" SG_ 532 BCVE_SB2_DefautIsolHT 0;
+BA_ "GenSigStartValue" SG_ 532 BCVE_SB2_CmdContacteursChargeur 0;
+BA_ "GenSigStartValue" SG_ 532 BCVE_SB2_EchecPrechargeApp 0;
+BA_ "GenSigStartValue" SG_ 532 BCVE_SB2_DefautContacteurs 0;
+BA_ "GenSigStartValue" SG_ 548 BCVE_SB3_CourantMaxCharge 0;
+BA_ "GenSigStartValue" SG_ 548 BCVE_SB3_TensionMaxBattAutori 0;
+BA_ "GenSigStartValue" SG_ 548 BCVE_SB3_FinDeCharge 0;
+BA_ "GenSigStartValue" SG_ 580 BCVE_SB4_TempBlocPlusChaud 40;
+BA_ "GenSigStartValue" SG_ 580 BCVE_SB4_TempBlocMoinsChaud 40;
+BA_ "GenSigStartValue" SG_ 580 BCVE_SB4_TensionAccuPlusCharge 0;
+BA_ "GenSigStartValue" SG_ 580 BCVE_SB4_TensionAccuMoinsCharge 0;
+
+VAL_ 899 BCVE_CB_RequeteModeBMS 0 "Deconnecte" 1 "Connecter_Chargeur" 2 "Connecter_Application" 3 "Non_Significatif" ;
+VAL_ 516 BCVE_SB1_ModeBMSChargeur 0 "Deconnecte" 1 "Connecte" ;
+VAL_ 516 BCVE_SB1_ModeBMSApplication 0 "Deconnecte" 1 "Connecte" ;
+VAL_ 516 BCVE_SB1_DefautCSU 0 "Absent" 1 "EnCours" ;
+VAL_ 516 BCVE_SB1_AlarmeBattChaude 0 "Absent" 1 "EnCours" ;
+VAL_ 516 Alarme_SurTemperature 0 "Absent" 1 "EnCours" ;
+VAL_ 516 BCVE_SB1_SOCFaible 0 "Absent" 1 "EnCours" ;
+VAL_ 516 BCVE_SB1_DefautSurChargeBatt1 0 "Absent" 1 "EnCours" ;
+VAL_ 516 BCVE_SB1_DefautSurDechargeBatt 0 "Absent" 1 "EnCours" ;
+VAL_ 516 BCVE_SB1_DefautSurtemperature 0 "Absent" 1 "EnCours" ;
+VAL_ 516 BCVE_SB1_DefautCapteurCourant 0 "Absent" 1 "EnCours" ;
+VAL_ 516 Alarme_SurDechargeBatt 0 "Absent" 1 "EnCours" ;
+VAL_ 516 BCVE_SB1_AlarmeSurChargeBatt 0 "Absent" 1 "EnCours" ;
+VAL_ 516 BCVE_SB1_DefautSurChargeBatt2 0 "Absent" 1 "EnCours" ;
+VAL_ 516 BCVE_SB1_OuvContactSurDechBatt 0 "Absent" 1 "EnCours" ;
+VAL_ 516 BCVE_SB1_EchecPrechargeApp 0 "Absent" 1 "EnCours" ;
+VAL_ 532 BCVE_SB2_PreavisOuvContacteurs 0 "Absent" 1 "EnCours" ;
+VAL_ 532 BCVE_SB2_CmdContacteursApp 0 "NonCommande" 1 "Commande" ;
+VAL_ 532 BCVE_SB2_DefautIsolHT 0 "Absent" 1 "EnCours" ;
+VAL_ 532 BCVE_SB2_CmdContacteursChargeur 0 "NonCommande" 1 "Commande" ;
+VAL_ 532 BCVE_SB2_EchecPrechargeApp 0 "Absent" 1 "EnCours" ;
+VAL_ 532 BCVE_SB2_DefautContacteurs 0 "Absent" 1 "EnCours" ;
+VAL_ 548 BCVE_SB3_FinDeCharge 0 "Absent" 1 "EnCours" ;
+

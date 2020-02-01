@@ -1,0 +1,46 @@
+See Quickstart guide for SAM ADC driver.
+
+Driver for the Analog-to-digital Converter. This driver provides access to the main features of the ADC controller.
+
+Modules
+ 	Related Project(s)
+ 	
+
+In this section you can find all the projects related to the Analog-to-digital Converter (ADC).
+
+ 	Quick Start Guide(s)
+ 	
+
+In this section you can find a list of all Quick Start guides related to the Analog-to-digital Converter (ADC).
+
+Functions
+void 	adc_disable_all_channel (Adc *p_adc)
+ 	Disable all ADC channel.
+void 	adc_disable_channel (Adc *p_adc, const enum adc_channel_num_t adc_ch)
+ 	Disable the specified ADC channel.
+void 	adc_disable_interrupt (Adc *p_adc, const uint32_t ul_source)
+ 	Disable ADC interrupts.
+void 	adc_enable_all_channel (Adc *p_adc)
+ 	Enable all ADC channels.
+void 	adc_enable_channel (Adc *p_adc, const enum adc_channel_num_t adc_ch)
+ 	Enable the specified ADC channel.
+void 	adc_enable_interrupt (Adc *p_adc, const uint32_t ul_source)
+ 	Enable ADC interrupts.
+uint32_t 	adc_get_actual_adc_clock (const Adc *p_adc, const uint32_t ul_mck)
+ 	Return the actual ADC clock.
+uint32_t 	adc_get_channel_status (const Adc *p_adc, const enum adc_channel_num_t adc_ch)
+ 	Read the ADC channel status.
+uint32_t 	adc_get_channel_value (const Adc *p_adc, const enum adc_channel_num_t adc_ch)
+ 	Read the ADC result data of the specified channel.
+uint32_t 	adc_get_interrupt_mask (const Adc *p_adc)
+ 	Read ADC interrupt mask.
+uint32_t 	adc_get_latest_value (const Adc *p_adc)
+ 	Read the last ADC result data.
+Pdc * 	adc_get_pdc_base (const Adc *p_adc)
+ 	Get PDC registers base address.
+void 	adc_set_resolution (Adc *p_adc, const enum adc_resolution_t resolution)
+ 	Configure the conversion resolution.
+void 	adc_start (Adc *p_adc)
+ 	Start analog-to-digital conversion.
+void 	adc_stop (Adc *p_adc)
+ 	Stop analog-to-digital conversion. 

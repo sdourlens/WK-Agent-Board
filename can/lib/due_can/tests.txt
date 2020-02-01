@@ -1,0 +1,42 @@
+CHECK CAN-DUE LIBRARY
+=====================
+
+CAN_MAILBOX_TRANSFER_OK 0
+CAN_MAILBOX_NOT_READY 1
+
+ok : begin +  init + setNumTXBoxes(1)
+ok : write + sendframe + mailbox_set_id + mailbox_set_datalen + mailbox_set_priority + mailbox_set_databyte
+			    enable_interrupt + //enable the TX interrupt for this box
+				global_send_transfer_cmd
+ok : mailbox_send_transfer_cmd => change a bit to send frame in mailbox (use for READ)
+ok : mailbox_send_abort_cmd => change a bit to send frame in mailbox
+ok : global_send_transfer_cmd => change a bit to send frame in mailbox
+ok : global_send_abort_cmd => change a bit to send frame in mailbox
+ok : mailbox_tx_frame(id_mailbox) + global_send_transfer_cmd
+
+CAN*_Handler + interruptHandler + mailbox_int_handler + global_send_transfer_cmd / global_send_abort_cmd
+
+disable_interrupt
+
+
+----------------------------
+CONSTAT 
+
+1 trame envoyée
+global_send_transfer_cmd : 1 trame en cours d'envoi
+reception avec mobileyecansee : 232967 fois la meme trame (meme timestamp) !
+pas possible d'envoyer d'autre trame (plus de 5 msg dans la mailbox mais ne part pas) 
+disable_tx_repeat: ON ou OFF, pas de changement !
+
+=> premier msg pas considéré comme envoyé et donc pas de modif mailbox et renvoie du 1er msg continuellement
+alors que msg reçu côté récepteur.
+
+recepteur est un sniffer pose un pb ? oui si le premier envoi de message est fait par l'emetteur (diag), pas de synchro du bus ou attente d'un ACK ?
+pas de réponse à la première trame impose le renvoi ? 
+get_tx_error_cnt renvoies 128 ? tout ok si au moins un envoi sur le bus est réalisé par un périphérique can (ex ELM327) autre que le diag
+
+-------------------------------
+
+=> problème d'initialisation ou de synchro du CAN bien que les messages sont bien émis et reçus (au bon débit)
+
+l'emission d'un msg CAN marche bien après qu'au moins un périph du CAN envoie une requete au diag, sinon ça foire
